@@ -1,36 +1,22 @@
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var connection = null;
+var utilities = require('../helpers/utilities');
+
+var args = utilities.parseArguments();
 var url = "localhost";
 var user = "username";
 var pw = "password";
-
-for(var i=2; i<process.argv.length; i++) {
-  console.log(process.argv[i]);
-  if(process.argv[i].startsWith("--")) {
-    var name = process.argv[i].slice(2).split("=")[0].toUpperCase();
-    switch(name) {
-      case "PORT":
-        if(process.argv[i].split("=").length !== 2) break;
-        port = parseInt(process.argv[i].split("=")[1]);
-        break;
-      case "USER":
-        if(process.argv[i].split("=").length !== 2) break;
-        user = process.argv[i].split("=")[1];
-        break;
-      case "PASSWORD":
-        if(process.argv[i].split("=").length !== 2) break;
-        pw = process.argv[i].split("=")[1];
-        break;
-      case "DB":
-        if(process.argv[i].split("=").length !== 2) break;
-        url = process.argv[i].split("=")[1];
-        break;
-      default:
-        console.log("Unknown flag \""+name+"\"")
-    }
-  }
+if(args["USER"] != null) {
+    user = args["USER"];
 }
+if(args["PW"] != null) {
+    pw = args["PW"];
+}
+if(args["DB"] != null) {
+    url = args["DB"];
+}
+
 
 MongoClient.connect("mongodb://"+url+":27017/levent", function(err, db) {
     db.admin().authenticate(user, pw, function(err, res) {
