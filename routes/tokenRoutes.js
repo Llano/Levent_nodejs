@@ -8,7 +8,8 @@ module.exports = function(router) {
     });
 
     router.post('/token', function(req, res) {
-        userModel.validateUser('Zacharias', 'herpderp', function(item) {
+        if(!req.body) return res.sendStatus(400);
+        userModel.validateUser(req.body.username, req.body.password, function(item) {
             if(!item)
             {
                 res.sendStatus(403)

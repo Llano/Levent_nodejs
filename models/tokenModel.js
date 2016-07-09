@@ -26,7 +26,7 @@ var verifyToken = function(req, res, next) {
             return next();
 
         }
-        res.sendStatus(401);
+        res.json(401, {"error" : "invalid token"});
 
 
     });

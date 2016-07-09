@@ -12,6 +12,18 @@ var getEvents = function(coordinates, maxDistance, callback) {
 
 }
 
+var createEvent = function(coordinates, title, user_id, callback) {
+    database.getConnection().collection('events').insertOne({
+        "title" : title,
+        "location" : coordinates,
+        "user_id" : user_id
+    }, function(err, result) {
+        if(!err)
+            callback();
+    });
+}
+
 module.exports = {
-    getEvents: getEvents
+    getEvents: getEvents,
+    createEvent: createEvent
 }
