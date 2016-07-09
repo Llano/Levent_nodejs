@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var path      = require('path')
 var router = express.Router();
-
+var utilities = require('./helpers/utilities');
 var bodyParser = require('body-parser');
 
 
@@ -22,51 +22,29 @@ var tokenRoute = require('./routes/tokenRoutes')(router);
 var eventRouter = require('./routes/eventRoutes')(router);
 
 // ------ Arguments ------ //
-var port,user,pw,db;
-for(var i=2; i<process.argv.length; i++) {
-  console.log(process.argv[i]);
-  if(process.argv[i].startsWith("--")) {
-    var name = process.argv[i].slice(2).split("=")[0].toUpperCase();
-    switch(name) {
-      case "PORT":
-        if(process.argv[i].split("=").length !== 2) break;
-        port = parseInt(process.argv[i].split("=")[1]);
-        break;
-      case "USER":
-        if(process.argv[i].split("=").length !== 2) break;
-        user = process.argv[i].split("=")[1];
-        break;
-      case "PASSWORD":
-        if(process.argv[i].split("=").length !== 2) break;
-        pw = process.argv[i].split("=")[1];
-        break;
-      case "DB":
-        if(process.argv[i].split("=").length !== 2) break;
-        db = process.argv[i].split("=")[1];
-        break;
-      default:
-        console.log("Unknown flag \""+name+"\"")
-    }
-  }
-}
-if(port==null) {
+var args = utilities.parseArguments();
+var port = 3000;
+if(args["PORT"] == null) {
   console.log("No port specified, using default port 3000");
-  port = 3000;
+} else {
+  port = parseInt(args["PORT"]);
 }
-if(user==null) {
-  user = "username"
-}
-if(pw==null) {
-  pw = "password"
-}
-if(db==null) {
-  db = "localhost";
+for(var i=2; i<process.argv.length; i++) {
+  if(process.argv[i] == "-h" || process.argv[i] == "--help") {
+    console.log("Levent\n\nArguments:\n--port=PORT\n\tSpecifies the PORT to "
+               +"listen on.\n--db=URL\n\tSpecifies the URL to the database to"
+               +" run with.\n--user=USER\n\tSpecifies the username to log into"
+               +" the database.\n--pw=PASSWORD\n\tSpecifies the PASSWORD used"
+               +" to log into the database.\n--help, -h\n\t Display this help"
+               +" message.");
+    process.exit();
+  }
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(port, function () {
-  console.log('Example app listening on port '+port+'!');
+  console.log('Levent listening on port '+port+'!');
 });
 
 app.get('*', function(req, res){
