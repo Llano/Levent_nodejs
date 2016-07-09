@@ -1,4 +1,5 @@
 var database = require('./dbModel');
+var ObjectId = require('mongodb').ObjectId;
 
 var getEvents = function(coordinates, maxDistance, callback) {
 
@@ -14,9 +15,13 @@ var getEvents = function(coordinates, maxDistance, callback) {
 
 var createEvent = function(coordinates, title, user_id, callback) {
     database.getConnection().collection('events').insertOne({
-        "title" : title,
-        "location" : coordinates,
-        "user_id" : user_id
+        title : title,
+        location : {
+            type : "Point",
+            coordinates : coordinates
+        },
+        user_id : ObjectId(user_id),
+        date: Date.now()
     }, function(err, result) {
         if(!err)
             callback();

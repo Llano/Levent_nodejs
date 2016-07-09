@@ -29,3 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
+
+app.get('*', function(req, res){
+  res.status(404).send('Not found');
+});
