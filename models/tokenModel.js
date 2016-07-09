@@ -27,8 +27,9 @@ var verifyToken = function(req, res, next) {
 
         }else {
             console.log(err);
-            res.json(401, {"error" : "invalid token"});
+            res.status(401).json({"error" : "invalid token"});
         }
+
 
 
 
