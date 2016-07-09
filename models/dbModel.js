@@ -2,6 +2,8 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var connection = null;
 var url = "localhost";
+var user = "username";
+var pw = "password";
 
 for(var i=2; i<process.argv.length; i++) {
   console.log(process.argv[i]);
@@ -31,7 +33,7 @@ for(var i=2; i<process.argv.length; i++) {
 }
 
 MongoClient.connect("mongodb://"+url+":27017/levent", function(err, db) {
-    db.admin().authenticate("levent", "levent", function(err, res) {
+    db.admin().authenticate(user, pw, function(err, res) {
         assert.equal(null, err);
         console.log("Connected correctly to server");
         db.collection('events').ensureIndex({"location": "2dsphere"});

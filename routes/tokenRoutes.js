@@ -12,7 +12,7 @@ module.exports = function(router) {
         userModel.validateUser(req.body.username, req.body.password, function(item) {
             if(!item)
             {
-                res.sendStatus(403)
+                res.sendStatus(400);
             }
             else {
                 tokenModel.generateToken({user_id: item._id}, function(token) {

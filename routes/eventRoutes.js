@@ -1,21 +1,19 @@
 var tokenModel = require('../models/tokenModel');
 var eventModel = require('../models/eventModel');
+var utilities = require('../helpers/utilities');
 module.exports = function(router) {
 
     router.get('/event', tokenModel.verifyToken, function(req, res) {
-        var geo = [
-            20.26304,
-            63.82585
-        ];
         var maxDistance = 10000; //max distance in meter
-        eventModel.getEvents(geo, maxDistance, function(data) {
+        eventModel.getEvents(utilities.parseHeaderCoordinates(req.get("coordinates")), maxDistance, function(data) {
             res.json({"events" : data});
         })
     });
 
     router.post('/event', tokenModel.verifyToken, function(req, res) {
-        if(!req.body) return res.sendStatus(400);
-        eventModel.createEvent([20.26304,63.82585], "test title", "1", function() {
+        if(!req.body.title) return res.sendStatus(400);
+
+        eventModel.createEvent(utilities.parseHeaderCoordinates(req.get("coordinates")), req.body.title, req.payload.user_id, function() {
             res.json({"status" : "success"});
         })
     });

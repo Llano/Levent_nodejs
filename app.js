@@ -68,3 +68,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, function () {
   console.log('Example app listening on port '+port+'!');
 });
+
+app.get('*', function(req, res){
+  res.status(404).send('Not found');
+});

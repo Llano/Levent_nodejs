@@ -1,11 +1,10 @@
 var database = require('./dbModel');
 var fs = require('fs')
+var assert = require('assert');
 var jwt = require('jsonwebtoken');
 var jwtkey = null;
 fs.readFile('jwt.key', 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
+  assert.equal(null, err);
 
   jwtkey = data;
 
@@ -23,14 +22,20 @@ var generateToken = function(payload, callback) {
 var verifyToken = function(req, res, next) {
     jwt.verify(req.get('Authorization'), jwtkey, function(err, decoded) {
         if (!err) {
-            return next();
+            req.payload = decoded;
+            next();
 
+        }else {
+            console.log(err);
+            res.status(401).json({"error" : "invalid token"});
         }
-        res.status(401).json({"error" : "invalid token"});
+
+
 
 
     });
 }
+
 
 module.exports = {
     verifyToken: verifyToken,
