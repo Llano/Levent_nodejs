@@ -14,6 +14,7 @@ module.exports = function(router) {
     });
 
     router.post('/event', tokenModel.verifyToken, function(req, res) {
+        if(!req.body) return res.sendStatus(400);
         eventModel.createEvent([20.26304,63.82585], "test title", "1", function() {
             res.json({"status" : "success"});
         })
