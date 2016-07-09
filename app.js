@@ -22,6 +22,19 @@ var tokenRoute = require('./routes/tokenRoutes')(router);
 var eventRouter = require('./routes/eventRoutes')(router);
 
 // ------ Arguments ------ //
+for(var i=2; i<process.argv.length; i++) {
+  if(process.argv[i] == "-h" || process.argv[i] == "--help") {
+    console.log("Levent\n\nArguments:\n--port=PORT\n\tSpecifies the PORT to "
+               +"listen on.\n\tDefault: 3000\n--db=URL\n\tSpecifies the URL to"
+               +" the database to run with.\n\tDefault: localhost\n--user=USER"
+               +"\n\tSpecifies the username to log into the database.\n\t"
+               +"Default: user\n--pw=PASSWORD\n\tSpecifies the PASSWORD used to"
+               +" log into the database.\n\tDefault: password\n--help, -h\n\t "
+               +"Display this help message.");
+    process.exit();
+  }
+}
+
 var args = utilities.parseArguments();
 var port = 3000;
 if(args["PORT"] == null) {
@@ -29,17 +42,7 @@ if(args["PORT"] == null) {
 } else {
   port = parseInt(args["PORT"]);
 }
-for(var i=2; i<process.argv.length; i++) {
-  if(process.argv[i] == "-h" || process.argv[i] == "--help") {
-    console.log("Levent\n\nArguments:\n--port=PORT\n\tSpecifies the PORT to "
-               +"listen on.\n--db=URL\n\tSpecifies the URL to the database to"
-               +" run with.\n--user=USER\n\tSpecifies the username to log into"
-               +" the database.\n--pw=PASSWORD\n\tSpecifies the PASSWORD used"
-               +" to log into the database.\n--help, -h\n\t Display this help"
-               +" message.");
-    process.exit();
-  }
-}
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
