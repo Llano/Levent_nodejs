@@ -20,13 +20,13 @@ var generateToken = function(payload, callback) {
 }
 
 var verifyToken = function(req, res, next) {
+    if(req.get('Authorization') == null){ return res.status(403).json({"error" : "no token"})}
     jwt.verify(req.get('Authorization'), jwtkey, function(err, decoded) {
         if (!err) {
             req.payload = decoded;
             next();
 
         }else {
-            console.log(err);
             res.status(401).json({"error" : "invalid token"});
         }
 

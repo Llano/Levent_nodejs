@@ -4,7 +4,7 @@ var utilities = require('../helpers/utilities');
 module.exports = function(router) {
 
     router.get('/event', tokenModel.verifyToken, function(req, res) {
-        var maxDistance = 10000; //max distance in meter
+        var maxDistance = 20 * 1000; //km
         eventModel.getEvents(utilities.parseHeaderCoordinates(req.get("coordinates")), maxDistance, function(data) {
             res.json({"events" : data});
         })

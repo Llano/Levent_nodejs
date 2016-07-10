@@ -2,7 +2,6 @@ var database = require('./dbModel');
 var ObjectId = require('mongodb').ObjectId;
 
 var getEvents = function(coordinates, maxDistance, callback) {
-
     database.getConnection().collection('events').find({"location" : {$near: {$geometry: {type: "Point", coordinates: coordinates}, $maxDistance: maxDistance}}}).toArray(function(err, document) {
         if(err) {
             console.log(err);
